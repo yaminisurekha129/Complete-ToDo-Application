@@ -1,3 +1,5 @@
-export class Task {
-    task:any;
-}
+export interface Task {
+    id: number;
+    task: string;
+   
+  }
