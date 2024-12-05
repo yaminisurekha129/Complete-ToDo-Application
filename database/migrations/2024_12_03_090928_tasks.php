@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('taskList', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('task');
             
@@ -18,7 +18,7 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('taskList');
+        Schema::dropIfExists('tasks');
     }
 
     
