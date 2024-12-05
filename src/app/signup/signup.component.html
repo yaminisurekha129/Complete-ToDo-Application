@@ -1,0 +1,37 @@
+<div class="container">
+  <form [formGroup]="signForm" (ngSubmit)="call()" class="form-group border border-dashed p-5 mt-5">
+    <h2 class="mt-5 text-center">Sign Up</h2>
+    <div>
+      <!-- Email input field -->
+      <input type="email" placeholder="Enter your email" formControlName="email" class="form-control mt-3" />
+      <div *ngIf="(submitted || formControls['email']?.touched) && formControls['email']?.invalid">
+        <small *ngIf="formControls['email']?.errors?.['required']">Email is required.</small>
+        <small *ngIf="formControls['email']?.errors?.['email']">Enter a valid email.</small>
+      </div>
+
+      <!-- Password input field -->
+      <input type="password" placeholder="Create Password" formControlName="password" class="form-control mt-3" />
+      <div *ngIf="(submitted || formControls['password']?.touched) && formControls['password']?.invalid">
+        <small *ngIf="formControls['password']?.errors?.['required']">Password is required.</small>
+        <small *ngIf="formControls['password']?.errors?.['minlength']">Password must be at least 8 characters long.</small>
+      </div>
+
+      <!-- Confirm Password input field -->
+      <input type="password" placeholder="Confirm Password" formControlName="password_confirmation" class="form-control mt-3" />
+      <div *ngIf="(submitted || formControls['password_confirmation']?.touched) && (formControls['password_confirmation']?.invalid || signForm.errors?.['mismatch'])">
+        <small *ngIf="formControls['password_confirmation']?.errors?.['required']">Confirm Password is required.</small>
+        <small *ngIf="signForm.errors?.['mismatch']">Passwords do not match.</small>
+      </div>
+
+      <!-- Submit button -->
+      <button type="submit" [disabled]="!signForm.valid" class="form-control mt-3 bg-primary text-white">
+        Sign Up
+      </button>
+
+      <!-- Login redirect link -->
+      <p class="text-center mt-3">
+        Already have an account? <a routerLink="/login">Login</a>
+      </p>
+    </div>
+  </form>
+</div>
