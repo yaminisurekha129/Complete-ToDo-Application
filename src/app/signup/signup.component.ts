@@ -43,7 +43,7 @@ export class SignupComponent implements OnInit {
     this.submitted = true;
     if (this.signForm.valid) {
       console.log(this.signForm.value);
-      this.signupService.insertDetail(this.signForm.value).subscribe(
+      this.signupService.signup(this.signForm.value).subscribe(
         response => {
           console.log('Signup successful:', response);
           this.signForm.reset(); // Reset the form after successful signup
@@ -56,9 +56,9 @@ export class SignupComponent implements OnInit {
   }
 
   // Function to handle inserting data
-  insertDetail() {
+  signup() {
     if (this.newEmail.trim() !== '' && this.newPassword.trim() !== '') {
-      this.signupService.insertDetail({ email: this.newEmail, password: this.newPassword }).subscribe(() => {
+      this.signupService.signup({ email: this.newEmail, password: this.newPassword }).subscribe(() => {
         this.newEmail = '';
         this.newPassword = '';
       });

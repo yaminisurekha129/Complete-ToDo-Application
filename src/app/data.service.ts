@@ -33,21 +33,49 @@ export class DataService {
  
 
   insertData(data:any){
-    return this.httpclient.post('http://127.0.0.1:8000/api/taskTable',data);
-
+    const token = this.getToken();
+    if (!token) {
+      console.error('No token found');
+    }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    
+    return this.httpclient.post('http://127.0.0.1:8000/api/taskTable',data,{headers});
   }
 
   getTaskById(id:any){
-    return this.httpclient.get('http://127.0.0.1:8000/api/taskTable/'+id);
+    const token = this.getToken();
+    if (!token) {
+      console.error('No token found');
+    }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.httpclient.get('http://127.0.0.1:8000/api/taskTable/'+id,{headers});
   }
 
   
   updateTask(id:any,data:any){
-    return this.httpclient.put('http://127.0.0.1:8000/api/taskTable/'+id,data);
+    const token = this.getToken();
+    if (!token) {
+      console.error('No token found');
+    }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.httpclient.put('http://127.0.0.1:8000/api/taskTable/'+id,data,{headers});
   }
 
   deleteData(id:any){
-    return this.httpclient.delete('http://127.0.0.1:8000/api/taskTable/'+id);
+    const token = this.getToken();
+    if (!token) {
+      console.error('No token found');
+    }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.httpclient.delete('http://127.0.0.1:8000/api/taskTable/'+id,{headers});
     
   }
 

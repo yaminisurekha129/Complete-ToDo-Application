@@ -49,8 +49,8 @@ export class LoginComponent implements OnInit {
           if (response && response.token) {
             const token = response.token;
             console.log('Login successful:', response);
-            localStorage.setItem('jwtToken', token);  // Store token in local storage
-            this.router.navigate(['/todo']);  // Navigate to 'todos' route
+            localStorage.setItem('jwtToken', token); 
+            this.router.navigate(['/todo']); 
           } else {
             console.error('Token not found in response');
             this.errorMessage = 'Unexpected error. Please try again.';
