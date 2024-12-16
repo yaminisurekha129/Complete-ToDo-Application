@@ -3,48 +3,68 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Todo;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
+
+
 class AuthController extends Controller
 {
+
+    public function index()
+    {
+        $tasks = Todo::all();
+        dd($tasks);
+        return response()->json($tasks);
+    }
+
+
+
+    // Fetch a specific user by ID
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json([
+                "message" => "User not found"
+            ], 404);
+        }
+    }
+
+    // Register a new user
     public function signup(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            // 'name' => 'required|string|max:255',
+        $validated = $request->validate([
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
+        $user = User::create([
+            'name' => $request->name ?? 'Default Name',
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
 
-        $user = new User();
-        $user->name = 'Default Name';
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        return response()->json(['message' => 'User created successfully'], 201);
+        return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
     }
 
+
+
+    // Login a user and generate a token
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
-        $credentials = $request->only('email', 'password');
-        
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['message' => 'Invalid credentials'], 401);
@@ -56,7 +76,18 @@ class AuthController extends Controller
         return response()->json(['token' => $token], 200);
     }
 
-    public function tokenerror(){
-        return response()->json(['message' => 'Token is not valid'], 500);
+
+
+
+    // Fetch the authenticated user
+    public function me()
+    {
+        return response()->json(auth()->user(), 200);
+    }
+
+    // Handle invalid token errors
+    public function tokenError()
+    {
+        return response()->json(['message' => 'Token is not valid'], 401);
     }
 }

@@ -10,5 +10,13 @@ class Todo extends Model
     use HasFactory;
 
     protected $table = 'tasks'; 
-    protected $fillable = ['task']; 
+    protected $fillable = ['task','user_id']; 
+
+
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id', 'id');
 }
+
+}
+
