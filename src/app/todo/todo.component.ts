@@ -20,21 +20,38 @@ export class TodoComponent implements OnInit {
 
   title='my-task-app';
   getTask() {
-    this.dataService && this.dataService.getData().subscribe(res => {
-      this.data = res;
-      this.items = this.data.map((item: any) => ({
-        id: item.id,
-        task: item.task,
-        isEditing: false
-      }));
+    this.dataService && this.dataService.getData().subscribe({
+      next: (res) => {
+        console.log('hjkk', res);
+        if (Array.isArray(res.tasks)) {
+          // If res is an array, proceed with mapping the data
+          this.data = res.tasks;
+          this.items = this.data.map((item: any) => ({
+            id: item.id,
+            task: item.task,
+            isEditing: false
+          }));
+        } else {
+          // Handle case where res is not an array
+          console.error('Expected an array but got:', res);
+          this.items = []; 
+        }
+      },
+      error: (err) => {
+        // Handle any errors that occur during the API call
+        console.error('Error fetching tasks:', err);
+        this.items = []; 
+      }
     });
   }
+  
 
   ngOnInit(): void {
     this.getTask();
   }
 
   insertData() {
+   
     if (this.newTask.trim() !== '') {
       this.dataService.insertData({ task: this.newTask }).subscribe(() => {
         this.getTask();
